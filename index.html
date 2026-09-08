@@ -1,0 +1,3916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Kisan Dashboard</title>
+
+<style>
+:root {
+    --green-dark:#14532d;
+    --green:#2e7d32;
+    --green-light:#e8f5e9;
+    --green-soft:#f1f8f2;
+    --yellow:#f9a825;
+    --yellow-light:#fff8e1;
+    --red:#d32f2f;
+    --red-light:#ffebee;
+    --blue:#1976d2;
+    --blue-light:#e3f2fd;
+    --purple:#7b1fa2;
+    --purple-light:#f3e5f5;
+    --orange:#ef6c00;
+    --orange-light:#fff3e0;
+    --white:#fff;
+    --background:#f5f7f4;
+    --text:#26332a;
+    --text-light:#66736a;
+    --border:#e2e8e3;
+    --shadow:0 4px 18px rgba(20,83,45,.08);
+    --shadow-hover:0 10px 28px rgba(20,83,45,.14);
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body {
+    background:var(--background);
+    color:var(--text);
+    min-height:100vh;
+}
+
+.app {
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width:260px;
+    background:linear-gradient(180deg,#14532d 0%,#1b5e20 55%,#0d3b20 100%);
+    color:white;
+    padding:24px 18px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    display:flex;
+    flex-direction:column;
+    z-index:10;
+}
+
+.brand {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 8px 25px;
+    border-bottom:1px solid rgba(255,255,255,.18);
+}
+
+.brand-icon {
+    width:48px;
+    height:48px;
+    background:rgba(255,255,255,.15);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+}
+
+.brand h2 {
+    font-size:21px;
+    line-height:1.2;
+}
+
+.brand small {
+    color:#c8e6c9;
+    font-size:12px;
+}
+
+.nav-title {
+    margin:28px 10px 10px;
+    color:#a5d6a7;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.nav-links {
+    list-style:none;
+}
+
+.nav-links li {
+    margin-bottom:8px;
+}
+
+.nav-links button {
+    width:100%;
+    border:none;
+    background:transparent;
+    color:#e8f5e9;
+    padding:14px 15px;
+    border-radius:12px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:15px;
+    font-weight:600;
+    text-align:left;
+    transition:.25s ease;
+}
+
+.nav-links button:hover {
+    background:rgba(255,255,255,.10);
+}
+
+.nav-links button.active {
+    background:white;
+    color:var(--green-dark);
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+}
+
+.nav-icon {
+    width:32px;
+    height:32px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.10);
+    font-size:17px;
+    flex-shrink:0;
+}
+
+.active .nav-icon {
+    background:var(--green-light);
+}
+
+.sidebar-footer {
+    margin-top:auto;
+    background:rgba(255,255,255,.09);
+    border-radius:14px;
+    padding:15px;
+    font-size:12px;
+    color:#dceddc;
+}
+
+.sidebar-footer strong {
+    display:block;
+    color:white;
+    margin-bottom:5px;
+    font-size:13px;
+}
+
+/* MAIN */
+
+.main {
+    margin-left:260px;
+    width:calc(100% - 260px);
+    padding:25px;
+}
+
+/* TOPBAR */
+
+.topbar {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:var(--shadow);
+    margin-bottom:22px;
+}
+
+.page-heading {
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.page-heading-icon {
+    width:48px;
+    height:48px;
+    background:var(--green-light);
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+
+.page-heading h1 {
+    font-size:24px;
+    color:var(--green-dark);
+    margin-bottom:3px;
+}
+
+.page-heading p {
+    color:var(--text-light);
+    font-size:13px;
+}
+
+.language-box {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--green-soft);
+    padding:8px 12px;
+    border:1px solid #d5e7d7;
+    border-radius:11px;
+}
+
+.language-box span {
+    font-size:17px;
+}
+
+.language-box select {
+    border:none;
+    background:transparent;
+    color:var(--green-dark);
+    font-weight:700;
+    outline:none;
+    cursor:pointer;
+    font-size:14px;
+}
+
+/* FARM STATUS */
+
+.farm-status {
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.status-card {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:17px;
+    box-shadow:var(--shadow);
+}
+
+.status-card.primary {
+    background:linear-gradient(135deg,#2e7d32,#1b5e20);
+    color:white;
+}
+
+.status-card .status-top {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:9px;
+}
+
+.status-label {
+    font-size:12px;
+    font-weight:600;
+    color:var(--text-light);
+}
+
+.primary .status-label {
+    color:#c8e6c9;
+}
+
+.status-icon {
+    font-size:20px;
+}
+
+.status-value {
+    font-size:21px;
+    font-weight:800;
+}
+
+.status-small {
+    margin-top:4px;
+    font-size:11px;
+    color:var(--text-light);
+}
+
+.primary .status-small {
+    color:#dceddc;
+}
+
+.online-dot {
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#66bb6a;
+    margin-right:5px;
+}
+
+/* SECTIONS */
+
+.section-pane {
+    display:none;
+}
+
+.section-pane.active {
+    display:block;
+}
+
+.section-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.section-header h2 {
+    font-size:18px;
+    color:var(--green-dark);
+}
+
+.section-header p {
+    font-size:12px;
+    color:var(--text-light);
+}
+
+/* DASHBOARD */
+
+.dashboard-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.card {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    transition:all .25s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.card:hover {
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-hover);
+    border-color:#b9d7bd;
+}
+
+.card::after {
+    content:"";
+    position:absolute;
+    right:-25px;
+    bottom:-35px;
+    width:90px;
+    height:90px;
+    background:var(--green-light);
+    border-radius:50%;
+    opacity:.65;
+}
+
+.card-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+    z-index:1;
+}
+
+.card-icon {
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+.icon-green {background:var(--green-light);}
+.icon-blue {background:var(--blue-light);}
+.icon-yellow {background:var(--yellow-light);}
+.icon-purple {background:var(--purple-light);}
+.icon-orange {background:var(--orange-light);}
+
+.status-pill {
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:700;
+}
+
+.pill-good {
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.pill-warning {
+    background:#fff8e1;
+    color:#ef6c00;
+}
+
+.card h3 {
+    margin-top:14px;
+    font-size:14px;
+    color:#526056;
+    position:relative;
+    z-index:1;
+}
+
+.value {
+    font-size:25px;
+    font-weight:800;
+    color:var(--green-dark);
+    margin-top:6px;
+    position:relative;
+    z-index:1;
+}
+
+.card-info {
+    margin-top:5px;
+    color:var(--text-light);
+    font-size:11px;
+    position:relative;
+    z-index:1;
+}
+
+/* HARDWARE */
+
+.hardware-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.control-card {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:var(--shadow);
+}
+
+.control-card-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.control-icon {
+    width:50px;
+    height:50px;
+    background:var(--green-light);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+
+.control-card h3 {
+    margin-top:17px;
+    font-size:16px;
+}
+
+.control-card p {
+    color:var(--text-light);
+    font-size:12px;
+    margin-top:6px;
+    line-height:1.5;
+}
+
+.control-status {
+    margin-top:17px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:14px;
+    border-top:1px solid var(--border);
+}
+
+.control-status strong {
+    color:var(--green);
+    font-size:13px;
+}
+
+.toggle {
+    width:45px;
+    height:24px;
+    background:#cfd8d1;
+    border-radius:20px;
+    position:relative;
+    cursor:pointer;
+}
+
+.toggle::after {
+    content:"";
+    width:18px;
+    height:18px;
+    background:white;
+    border-radius:50%;
+    position:absolute;
+    top:3px;
+    left:4px;
+    box-shadow:0 2px 4px rgba(0,0,0,.2);
+    transition:.2s;
+}
+
+.toggle.on {
+    background:var(--green);
+}
+
+.toggle.on::after {
+    left:23px;
+}
+
+/* ALERTS */
+
+.alert-container {
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:18px;
+}
+
+.alert-main {
+    background:linear-gradient(135deg,#fff5f5,#fff);
+    border:1px solid #ffcdd2;
+    border-left:5px solid var(--red);
+    border-radius:17px;
+    padding:22px;
+    box-shadow:var(--shadow);
+}
+
+.alert-heading {
+    display:flex;
+    gap:14px;
+    align-items:center;
+}
+
+.alert-icon {
+    width:48px;
+    height:48px;
+    background:var(--red-light);
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+
+.alert-heading h3 {
+    color:#b71c1c;
+    font-size:17px;
+}
+
+.alert-heading p {
+    color:var(--text-light);
+    font-size:12px;
+    margin-top:4px;
+}
+
+.forecast-box {
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.forecast-item {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:13px;
+}
+
+.forecast-item span {
+    display:block;
+    color:var(--text-light);
+    font-size:11px;
+    margin-bottom:5px;
+}
+
+.forecast-item strong {
+    font-size:15px;
+}
+
+.weather-card {
+    background:linear-gradient(135deg,#1976d2,#0d47a1);
+    color:white;
+    border-radius:17px;
+    padding:22px;
+    box-shadow:var(--shadow);
+}
+
+.weather-card small {
+    color:#bbdefb;
+}
+
+.weather-temp {
+    font-size:42px;
+    font-weight:800;
+    margin:12px 0 2px;
+}
+
+.weather-condition {
+    font-size:14px;
+}
+
+.weather-details {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:22px;
+}
+
+.weather-detail {
+    background:rgba(255,255,255,.12);
+    padding:10px;
+    border-radius:10px;
+}
+
+.weather-detail span {
+    display:block;
+    font-size:10px;
+    color:#bbdefb;
+}
+
+.weather-detail strong {
+    font-size:13px;
+}
+
+/* =====================================================
+   ONLINE MARKET
+===================================================== */
+
+.market-toolbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+}
+
+.market-categories {
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.category-btn {
+    border:1px solid var(--border);
+    background:white;
+    color:var(--text);
+    padding:9px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.category-btn:hover,
+.category-btn.active {
+    background:var(--green);
+    color:white;
+    border-color:var(--green);
+}
+
+.cart-btn {
+    border:none;
+    background:var(--green-dark);
+    color:white;
+    padding:11px 17px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    box-shadow:var(--shadow);
+}
+
+.cart-btn:hover {
+    background:var(--green);
+}
+
+.market-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:17px;
+}
+
+.market-card {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:16px;
+    box-shadow:var(--shadow);
+    transition:.25s ease;
+}
+
+.market-card:hover {
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-hover);
+}
+
+.produce-image {
+    height:130px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#f1f8f2,#e8f5e9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:65px;
+    margin-bottom:14px;
+}
+
+.produce-category {
+    color:var(--text-light);
+    font-size:10px;
+    text-transform:uppercase;
+    font-weight:700;
+    letter-spacing:.7px;
+}
+
+.market-card h3 {
+    color:var(--green-dark);
+    margin-top:5px;
+    font-size:16px;
+}
+
+.produce-location {
+    color:var(--text-light);
+    font-size:11px;
+    margin-top:5px;
+}
+
+.produce-price {
+    font-size:19px;
+    font-weight:800;
+    color:var(--green);
+    margin-top:10px;
+}
+
+.produce-unit {
+    font-size:11px;
+    color:var(--text-light);
+    font-weight:500;
+}
+
+.buy-btn,
+.sell-btn {
+    width:100%;
+    border:none;
+    border-radius:10px;
+    padding:10px;
+    margin-top:13px;
+    cursor:pointer;
+    font-weight:700;
+    transition:.2s;
+}
+
+.buy-btn {
+    background:var(--green);
+    color:white;
+}
+
+.buy-btn:hover {
+    background:var(--green-dark);
+}
+
+.sell-section {
+    margin-top:25px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:var(--shadow);
+}
+
+.sell-section h3 {
+    color:var(--green-dark);
+    margin-bottom:5px;
+}
+
+.sell-section > p {
+    color:var(--text-light);
+    font-size:12px;
+    margin-bottom:18px;
+}
+
+.sell-form {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:13px;
+}
+
+.form-group {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.form-group label {
+    font-size:11px;
+    font-weight:700;
+    color:#526056;
+}
+
+.form-group input,
+.form-group select {
+    border:1px solid var(--border);
+    background:var(--green-soft);
+    padding:11px;
+    border-radius:10px;
+    outline:none;
+    color:var(--text);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color:var(--green);
+}
+
+.sell-btn {
+    background:var(--orange);
+    color:white;
+}
+
+.sell-btn:hover {
+    background:#d95f00;
+}
+
+/* CART */
+
+.cart-modal-list {
+    margin-top:15px;
+}
+
+.cart-item {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.cart-item-left {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.cart-item-icon {
+    width:38px;
+    height:38px;
+    background:var(--green-light);
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.cart-item-name {
+    font-size:13px;
+    font-weight:700;
+}
+
+.cart-item-price {
+    font-size:12px;
+    color:var(--green);
+    margin-top:3px;
+}
+
+.cart-total {
+    display:flex;
+    justify-content:space-between;
+    margin-top:18px;
+    font-size:16px;
+    font-weight:800;
+    color:var(--green-dark);
+}
+
+.checkout-btn {
+    width:100%;
+    margin-top:15px;
+    border:none;
+    background:var(--green);
+    color:white;
+    padding:12px;
+    border-radius:11px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.empty-cart {
+    text-align:center;
+    color:var(--text-light);
+    padding:25px 0;
+    font-size:13px;
+}
+
+/* MODAL */
+
+.modal {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(10,30,15,.55);
+    backdrop-filter:blur(3px);
+    justify-content:center;
+    align-items:center;
+    z-index:100;
+    padding:20px;
+}
+
+.modal-content {
+    background:white;
+    width:100%;
+    max-width:480px;
+    max-height:90vh;
+    overflow:auto;
+    border-radius:20px;
+    padding:28px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    position:relative;
+}
+
+.close-btn {
+    position:absolute;
+    right:18px;
+    top:14px;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:var(--green-light);
+    color:var(--green-dark);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.modal-content h2 {
+    color:var(--green-dark);
+    margin-bottom:10px;
+}
+
+.modal-content p {
+    color:var(--text-light);
+    line-height:1.6;
+}
+
+/* =====================================================
+   ADDITIONAL ATTRIBUTES & GOVERNMENT SCHEMES
+===================================================== */
+.attributes-grid,.schemes-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+}
+.attribute-card,.scheme-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+.attribute-card{
+    cursor:pointer;
+    transition:.25s ease;
+}
+.attribute-card:hover,.scheme-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-hover);
+}
+.attribute-icon{
+    width:48px;height:48px;border-radius:13px;
+    background:var(--green-light);
+    display:flex;align-items:center;justify-content:center;
+    font-size:25px;margin-bottom:14px;
+}
+.attribute-card h3,.scheme-card h3{
+    color:var(--green-dark);font-size:16px;margin-bottom:7px;
+}
+.attribute-card p,.scheme-card p{
+    color:var(--text-light);font-size:12px;line-height:1.55;
+}
+.scheme-tag{
+    display:inline-block;margin-bottom:10px;padding:5px 9px;
+    border-radius:15px;background:var(--blue-light);color:var(--blue);
+    font-size:10px;font-weight:700;
+}
+.scheme-btn{
+    display:inline-block;margin-top:14px;padding:9px 12px;
+    border-radius:10px;background:var(--green);color:white;
+    border:none;font-weight:700;cursor:pointer;text-decoration:none;
+}
+.scheme-btn:hover{background:var(--green-dark);}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+    .dashboard-grid {
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .farm-status {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .hardware-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .market-grid {
+        grid-template-columns:repeat(3,1fr);
+    }
+    .attributes-grid,.schemes-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .sell-form {
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:800px) {
+    .sidebar {
+        width:76px;
+        padding:15px 10px;
+    }
+
+    .brand {
+        justify-content:center;
+        padding-bottom:18px;
+    }
+
+    .brand-text,
+    .nav-title,
+    .nav-links button span,
+    .sidebar-footer {
+        display:none;
+    }
+
+    .nav-links button {
+        justify-content:center;
+        padding:13px;
+    }
+
+    .nav-icon {
+        width:38px;
+        height:38px;
+    }
+
+    .main {
+        margin-left:76px;
+        width:calc(100% - 76px);
+        padding:15px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .alert-container {
+        grid-template-columns:1fr;
+    }
+
+    .market-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:560px) {
+    .topbar {
+        padding:14px;
+        flex-direction:column;
+        align-items:stretch;
+        gap:12px;
+    }
+
+    .page-heading h1 {
+        font-size:19px;
+    }
+
+    .language-box {
+        justify-content:center;
+    }
+
+    .farm-status {
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .dashboard-grid,
+    .hardware-grid,
+    .market-grid {
+        grid-template-columns:1fr;
+    }
+    .attributes-grid,.schemes-grid {
+        grid-template-columns:1fr;
+    }
+
+    .forecast-box {
+        grid-template-columns:1fr;
+    }
+
+    .sell-form {
+        grid-template-columns:1fr;
+    }
+
+    .main {
+        padding:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">🌾</div>
+
+        <div class="brand-text">
+            <h2 data-i18n="brandTitle">Smart Kisan</h2>
+            <small data-i18n="brandSubtitle">Smart Agriculture</small>
+        </div>
+
+    </div>
+
+    <div class="nav-title" data-i18n="dashboard">
+        Dashboard
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <button class="active"
+                    onclick="showSection('sensors',this)">
+                <div class="nav-icon">📡</div>
+                <span data-i18n="sensors">Sensors</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showSection('hardware',this)">
+                <div class="nav-icon">⚙️</div>
+                <span data-i18n="hardware">Hardware & Control</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showSection('alerts',this)">
+                <div class="nav-icon">🚨</div>
+                <span data-i18n="alerts">Alerts & Forecast</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showSection('attributes',this)">
+                <div class="nav-icon">➕</div>
+                <span data-i18n="attributes">Additional Attributes</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showSection('schemes',this)">
+                <div class="nav-icon">🏛️</div>
+                <span data-i18n="schemes">Government Schemes</span>
+            </button>
+        </li>
+
+    </ul>
+
+    <div class="sidebar-footer">
+        <strong data-i18n="farmStatus">🌱 Farm Status</strong>
+
+        <span data-i18n="farmStatusText">
+            All major systems are currently operating normally.
+        </span>
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+<header class="topbar">
+
+    <div class="page-heading">
+
+        <div class="page-heading-icon">
+            🌱
+        </div>
+
+        <div>
+
+            <h1 id="page-title"
+                data-i18n="farmHealth">
+                Farm Health
+            </h1>
+
+            <p data-i18n="pageDescription">
+                Simple information to help you care for your farm.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="language-box">
+
+        <span>🌐</span>
+
+        <select id="languageSelect">
+
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="mr">मराठी</option>
+
+        </select>
+
+    </div>
+
+</header>
+
+
+<!-- FARM STATUS -->
+
+<div class="farm-status">
+
+    <div class="status-card primary">
+
+        <div class="status-top">
+
+            <span class="status-label"
+                  data-i18n="overallHealth">
+                Overall Farm Health
+            </span>
+
+            <span class="status-icon">🌿</span>
+
+        </div>
+
+        <div class="status-value"
+             data-i18n="good">
+            Good
+        </div>
+
+        <div class="status-small">
+
+            <span class="online-dot"></span>
+
+            <span data-i18n="systemsOnline">
+                All important systems are online
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="status-card">
+
+        <div class="status-top">
+
+            <span class="status-label"
+                  data-i18n="soilMoisture">
+                Soil Moisture
+            </span>
+
+            <span class="status-icon">💧</span>
+
+        </div>
+
+        <div class="status-value">42%</div>
+
+        <div class="status-small"
+             data-i18n="optimalCrops">
+            Optimal for crops
+        </div>
+
+    </div>
+
+
+    <div class="status-card">
+
+        <div class="status-top">
+
+            <span class="status-label"
+                  data-i18n="waterTank">
+                Water Tank
+            </span>
+
+            <span class="status-icon">🚰</span>
+
+        </div>
+
+        <div class="status-value">78%</div>
+
+        <div class="status-small"
+             data-i18n="waterAvailable">
+            Water available
+        </div>
+
+    </div>
+
+
+    <div class="status-card">
+
+        <div class="status-top">
+
+            <span class="status-label"
+                  data-i18n="warnings">
+                Warnings
+            </span>
+
+            <span class="status-icon">⚠️</span>
+
+        </div>
+
+        <div class="status-value">1</div>
+
+        <div class="status-small"
+             data-i18n="checkForecast">
+            Check today's forecast
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SENSOR SECTION
+===================================================== -->
+
+<section id="sensors"
+         class="section-pane active">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2 data-i18n="fieldConditions">
+                🌱 Field Conditions
+            </h2>
+
+            <p data-i18n="liveSensorInfo">
+                Live information from your farm sensors
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="card"
+             onclick="openModal('soilMoisture')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-blue">
+                    💧
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="good">
+                    Good
+                </span>
+
+            </div>
+
+            <h3 data-i18n="soilMoisture">
+                Soil Moisture
+            </h3>
+
+            <div class="value">
+                42%
+            </div>
+
+            <div class="card-info"
+                 data-i18n="optimalRange">
+                Optimal range
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('soilTemperature')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-orange">
+                    🌡️
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="normal">
+                    Normal
+                </span>
+
+            </div>
+
+            <h3 data-i18n="soilTemperature">
+                Soil Temperature
+            </h3>
+
+            <div class="value">
+                24°C
+            </div>
+
+            <div class="card-info"
+                 data-i18n="healthyRange">
+                Healthy range
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('airConditions')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-blue">
+                    ☁️
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="good">
+                    Good
+                </span>
+
+            </div>
+
+            <h3 data-i18n="airConditions">
+                Air Conditions
+            </h3>
+
+            <div class="value">
+                30°C
+            </div>
+
+            <div class="card-info">
+                <span data-i18n="humidity">Humidity</span>: 65%
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('rainSensor')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-yellow">
+                    🌧️
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="clear">
+                    Clear
+                </span>
+
+            </div>
+
+            <h3 data-i18n="rainSensor">
+                Rain Sensor
+            </h3>
+
+            <div class="value"
+                 data-i18n="dry">
+                Dry
+            </div>
+
+            <div class="card-info"
+                 data-i18n="noRain">
+                No rain detected
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('lightIntensity')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-yellow">
+                    ☀️
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="good">
+                    Good
+                </span>
+
+            </div>
+
+            <h3 data-i18n="sunlight">
+                Sunlight
+            </h3>
+
+            <div class="value">
+                850
+            </div>
+
+            <div class="card-info"
+                 data-i18n="luxIntensity">
+                Lux intensity
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('fieldActivity')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-purple">
+                    📳
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="normal">
+                    Normal
+                </span>
+
+            </div>
+
+            <h3 data-i18n="fieldActivity">
+                Field Activity
+            </h3>
+
+            <div class="value"
+                 data-i18n="normal">
+                Normal
+            </div>
+
+            <div class="card-info"
+                 data-i18n="noUnusualActivity">
+                No unusual activity
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('soilNutrients')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-green">
+                    🧪
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="active">
+                    Active
+                </span>
+
+            </div>
+
+            <h3 data-i18n="soilNutrients">
+                Soil Nutrients
+            </h3>
+
+            <div class="value">
+                N-P-K
+            </div>
+
+            <div class="card-info"
+                 data-i18n="nutrientSensor">
+                Nutrient sensor active
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('soilPH')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-green">
+                    🌱
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="balanced">
+                    Balanced
+                </span>
+
+            </div>
+
+            <h3 data-i18n="soilPH">
+                Soil pH
+            </h3>
+
+            <div class="value">
+                6.8
+            </div>
+
+            <div class="card-info"
+                 data-i18n="goodSoilBalance">
+                Good soil balance
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('motionDetector')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-purple">
+                    👁️
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="clear">
+                    Clear
+                </span>
+
+            </div>
+
+            <h3 data-i18n="motionDetector">
+                Motion Detector
+            </h3>
+
+            <div class="value"
+                 data-i18n="clear">
+                Clear
+            </div>
+
+            <div class="card-info"
+                 data-i18n="fieldSecure">
+                Field secure
+            </div>
+
+        </div>
+
+
+        <div class="card"
+             onclick="openModal('waterLevel')">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-blue">
+                    🚰
+                </div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="good">
+                    Good
+                </span>
+
+            </div>
+
+            <h3 data-i18n="waterTank">
+                Water Tank
+            </h3>
+
+            <div class="value">
+                78%
+            </div>
+
+            <div class="card-info"
+                 data-i18n="waterAvailable">
+                Water available
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HARDWARE SECTION
+===================================================== -->
+
+<section id="hardware"
+         class="section-pane">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2 data-i18n="farmEquipment">
+                ⚙️ Farm Equipment
+            </h2>
+
+            <p data-i18n="equipmentDescription">
+                Monitor and manage your connected equipment
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="hardware-grid">
+
+        <div class="control-card">
+
+            <div class="control-card-top">
+
+                <div class="control-icon">☀️</div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="active">
+                    Active
+                </span>
+
+            </div>
+
+            <h3 data-i18n="solarPanels">
+                Solar Panels
+            </h3>
+
+            <p data-i18n="solarDescription">
+                Solar power system is working and supplying
+                energy to your farm equipment.
+            </p>
+
+            <div class="control-status">
+
+                <strong>18.5V Output</strong>
+
+                <div class="toggle on"
+                     onclick="toggleDevice(this)">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="control-card">
+
+            <div class="control-card-top">
+
+                <div class="control-icon">💦</div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="ready">
+                    Ready
+                </span>
+
+            </div>
+
+            <h3 data-i18n="pesticideSprayer">
+                Pesticide Sprayer
+            </h3>
+
+            <p data-i18n="sprayerDescription">
+                Sprayer is ready. Scheduled operation is set
+                for 06:00 AM.
+            </p>
+
+            <div class="control-status">
+
+                <strong data-i18n="readyToUse">
+                    Ready to use
+                </strong>
+
+                <div class="toggle"
+                     onclick="toggleDevice(this)">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="control-card">
+
+            <div class="control-card-top">
+
+                <div class="control-icon">📷</div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="online">
+                    Online
+                </span>
+
+            </div>
+
+            <h3 data-i18n="farmCamera">
+                Farm Camera
+            </h3>
+
+            <p data-i18n="cameraDescription">
+                Camera is connected and the live farm view
+                is available.
+            </p>
+
+            <div class="control-status">
+
+                <strong data-i18n="liveStream">
+                    Live Stream
+                </strong>
+
+                <div class="toggle on"
+                     onclick="toggleDevice(this)">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="control-card">
+
+            <div class="control-card-top">
+
+                <div class="control-icon">📍</div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="online">
+                    Online
+                </span>
+
+            </div>
+
+            <h3 data-i18n="gpsWifi">
+                GPS / Wi-Fi
+            </h3>
+
+            <p data-i18n="gpsDescription">
+                GPS is connected and Wi-Fi signal strength
+                is good.
+            </p>
+
+            <div class="control-status">
+
+                <strong data-i18n="connected">
+                    Connected
+                </strong>
+
+                <div class="toggle on"
+                     onclick="toggleDevice(this)">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="control-card">
+
+            <div class="control-card-top">
+
+                <div class="control-icon">🤖</div>
+
+                <span class="status-pill pill-good"
+                      data-i18n="automatic">
+                    Automatic
+                </span>
+
+            </div>
+
+            <h3 data-i18n="smartControl">
+                Smart Control
+            </h3>
+
+            <p data-i18n="smartControlDescription">
+                Automatic mode allows the system to respond
+                to sensor readings.
+            </p>
+
+            <div class="control-status">
+
+                <strong data-i18n="autoMode">
+                    Auto Mode
+                </strong>
+
+                <div class="toggle on"
+                     onclick="toggleDevice(this)">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ALERT SECTION
+===================================================== -->
+
+<section id="alerts"
+         class="section-pane">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2 data-i18n="alertsWeather">
+                🚨 Alerts & Weather
+            </h2>
+
+            <p data-i18n="alertsDescription">
+                Important information for today's farm activities
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="alert-container">
+
+        <div class="alert-main">
+
+            <div class="alert-heading">
+
+                <div class="alert-icon">⚠️</div>
+
+                <div>
+
+                    <h3 data-i18n="importantWarning">
+                        One Important Warning
+                    </h3>
+
+                    <p data-i18n="sprayWarning">
+                        Please check the upcoming rain conditions
+                        before spraying.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="forecast-box">
+
+                <div class="forecast-item">
+
+                    <span data-i18n="rainChance">
+                        🌧️ Rain Chance
+                    </span>
+
+                    <strong>40%</strong>
+
+                </div>
+
+
+                <div class="forecast-item">
+
+                    <span data-i18n="pestRisk">
+                        🐛 Pest Risk
+                    </span>
+
+                    <strong style="color:#2e7d32;"
+                            data-i18n="low">
+                        Low
+                    </strong>
+
+                </div>
+
+
+                <div class="forecast-item">
+
+                    <span data-i18n="sprayAdvice">
+                        💦 Spray Advice
+                    </span>
+
+                    <strong style="color:#ef6c00;"
+                            data-i18n="checkWeather">
+                        Check Weather
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="weather-card">
+
+            <small data-i18n="todaysWeather">
+                Today's Weather
+            </small>
+
+            <div class="weather-temp">
+                30°C
+            </div>
+
+            <div class="weather-condition"
+                 data-i18n="partlyCloudy">
+                ☀️ Partly Cloudy
+            </div>
+
+            <div class="weather-details">
+
+                <div class="weather-detail">
+
+                    <span data-i18n="humidity">
+                        Humidity
+                    </span>
+
+                    <strong>65%</strong>
+
+                </div>
+
+
+                <div class="weather-detail">
+
+                    <span data-i18n="rainChance">
+                        Rain Chance
+                    </span>
+
+                    <strong>40%</strong>
+
+                </div>
+
+
+                <div class="weather-detail">
+
+                    <span data-i18n="wind">
+                        Wind
+                    </span>
+
+                    <strong>12 km/h</strong>
+
+                </div>
+
+
+                <div class="weather-detail">
+
+                    <span data-i18n="uv">
+                        UV
+                    </span>
+
+                    <strong data-i18n="moderate">
+                        Moderate
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ADDITIONAL ATTRIBUTES SECTION
+===================================================== -->
+<section id="attributes" class="section-pane">
+
+    <div class="section-header">
+        <div>
+            <h2 data-i18n="additionalAttributes">➕ Additional Attributes</h2>
+            <p data-i18n="attributesDescription">Extra tools and farmer services in one place</p>
+        </div>
+    </div>
+
+    <div class="attributes-grid">
+        <div class="attribute-card" onclick="showSection('market',null)">
+            <div class="attribute-icon">🛒</div>
+            <h3 data-i18n="marketAttribute">Online Market</h3>
+            <p data-i18n="marketAttributeDesc">Buy farm produce or list your own produce for sale.</p>
+        </div>
+
+        <div class="attribute-card" onclick="showSection('sensors',null)">
+            <div class="attribute-icon">📊</div>
+            <h3 data-i18n="sensorAttribute">Sensor Analytics</h3>
+            <p data-i18n="sensorAttributeDesc">View soil, water, weather and field sensor information.</p>
+        </div>
+
+        <div class="attribute-card" onclick="showSection('hardware',null)">
+            <div class="attribute-icon">🤖</div>
+            <h3 data-i18n="smartAttribute">Smart Automation</h3>
+            <p data-i18n="smartAttributeDesc">Manage connected farm equipment and automatic controls.</p>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================
+     GOVERNMENT SCHEMES SECTION
+===================================================== -->
+<section id="schemes" class="section-pane">
+
+    <div class="section-header">
+        <div>
+            <h2 data-i18n="governmentSchemes">🏛️ Government Schemes</h2>
+            <p data-i18n="schemesDescription">Important agricultural schemes and farmer support programs</p>
+        </div>
+    </div>
+
+    <div class="schemes-grid">
+
+        <div class="scheme-card">
+            <span class="scheme-tag">PM-KISAN</span>
+            <h3>Pradhan Mantri Kisan Samman Nidhi</h3>
+            <p>Income support scheme for eligible farmer families.</p>
+            <a class="scheme-btn" href="https://pmkisan.gov.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">PMFBY</span>
+            <h3>Pradhan Mantri Fasal Bima Yojana</h3>
+            <p>Crop insurance support against specified crop losses and risks.</p>
+            <a class="scheme-btn" href="https://pmfby.gov.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">PMKSY</span>
+            <h3>Pradhan Mantri Krishi Sinchayee Yojana</h3>
+            <p>Government program focused on irrigation and water-use efficiency.</p>
+            <a class="scheme-btn" href="https://pmksy.gov.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">KCC</span>
+            <h3>Kisan Credit Card</h3>
+            <p>Credit facility designed to support farmers' agricultural and related needs.</p>
+            <a class="scheme-btn" href="https://www.myscheme.gov.in/" target="_blank" rel="noopener">Find Details ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">e-NAM</span>
+            <h3>National Agriculture Market</h3>
+            <p>Online agricultural market platform connecting regulated markets.</p>
+            <a class="scheme-btn" href="https://www.enam.gov.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">Soil Health</span>
+            <h3>Soil Health Card Scheme</h3>
+            <p>Provides soil-test based information and nutrient management recommendations.</p>
+            <a class="scheme-btn" href="https://soilhealth.dac.gov.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">RKVY</span>
+            <h3>Rashtriya Krishi Vikas Yojana</h3>
+            <p>Supports agricultural development projects and state-level initiatives.</p>
+            <a class="scheme-btn" href="https://rkvy.nic.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">MIDH</span>
+            <h3>Mission for Integrated Development of Horticulture</h3>
+            <p>Support program for horticulture development and related activities.</p>
+            <a class="scheme-btn" href="https://midh.gov.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+        <div class="scheme-card">
+            <span class="scheme-tag">DBT Agriculture</span>
+            <h3>Direct Benefit Transfer Agriculture</h3>
+            <p>Platform for agriculture-related government benefits and services.</p>
+            <a class="scheme-btn" href="https://dbt.gov.in/" target="_blank" rel="noopener">Official Website ↗</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- =====================================================
+     ONLINE MARKET SECTION
+===================================================== -->
+
+<section id="market"
+         class="section-pane">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2 data-i18n="onlineMarket">
+                🛒 Online Farm Market
+            </h2>
+
+            <p data-i18n="marketDescription">
+                Buy fresh farm produce or sell your own produce directly.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- MARKET FILTER -->
+
+    <div class="market-toolbar">
+
+        <div class="market-categories">
+
+            <button class="category-btn active"
+                    onclick="filterMarket('all',this)"
+                    data-i18n="all">
+                All
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterMarket('vegetables',this)"
+                    data-i18n="vegetables">
+                Vegetables
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterMarket('fruits',this)"
+                    data-i18n="fruits">
+                Fruits
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterMarket('grains',this)"
+                    data-i18n="grains">
+                Grains
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterMarket('other',this)"
+                    data-i18n="otherProduce">
+                Other Produce
+            </button>
+
+        </div>
+
+
+        <button class="cart-btn"
+                onclick="openCart()">
+
+            🛒
+            <span data-i18n="cart">
+                Cart
+            </span>
+
+            (<span id="cartCount">0</span>)
+
+        </button>
+
+    </div>
+
+
+    <!-- MARKET PRODUCTS -->
+
+    <div class="market-grid"
+         id="marketGrid">
+
+
+        <div class="market-card"
+             data-category="vegetables">
+
+            <div class="produce-image">
+                🍅
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="vegetables">
+                Vegetables
+            </div>
+
+            <h3 data-i18n="tomatoes">
+                Fresh Tomatoes
+            </h3>
+
+            <div class="produce-location">
+                📍 Nashik, Maharashtra
+            </div>
+
+            <div class="produce-price">
+                ₹35
+                <span class="produce-unit">/ kg</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Fresh Tomatoes',35,'🍅')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="vegetables">
+
+            <div class="produce-image">
+                🧅
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="vegetables">
+                Vegetables
+            </div>
+
+            <h3 data-i18n="onions">
+                Fresh Onions
+            </h3>
+
+            <div class="produce-location">
+                📍 Pune, Maharashtra
+            </div>
+
+            <div class="produce-price">
+                ₹28
+                <span class="produce-unit">/ kg</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Fresh Onions',28,'🧅')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="vegetables">
+
+            <div class="produce-image">
+                🥔
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="vegetables">
+                Vegetables
+            </div>
+
+            <h3 data-i18n="potatoes">
+                Potatoes
+            </h3>
+
+            <div class="produce-location">
+                📍 Ahmednagar, Maharashtra
+            </div>
+
+            <div class="produce-price">
+                ₹30
+                <span class="produce-unit">/ kg</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Potatoes',30,'🥔')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="fruits">
+
+            <div class="produce-image">
+                🥭
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="fruits">
+                Fruits
+            </div>
+
+            <h3 data-i18n="mangoes">
+                Alphonso Mangoes
+            </h3>
+
+            <div class="produce-location">
+                📍 Ratnagiri, Maharashtra
+            </div>
+
+            <div class="produce-price">
+                ₹180
+                <span class="produce-unit">/ kg</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Alphonso Mangoes',180,'🥭')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="fruits">
+
+            <div class="produce-image">
+                🍌
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="fruits">
+                Fruits
+            </div>
+
+            <h3 data-i18n="bananas">
+                Bananas
+            </h3>
+
+            <div class="produce-location">
+                📍 Jalgaon, Maharashtra
+            </div>
+
+            <div class="produce-price">
+                ₹45
+                <span class="produce-unit">/ dozen</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Bananas',45,'🍌')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="fruits">
+
+            <div class="produce-image">
+                🍎
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="fruits">
+                Fruits
+            </div>
+
+            <h3 data-i18n="apples">
+                Fresh Apples
+            </h3>
+
+            <div class="produce-location">
+                📍 Himachal Pradesh
+            </div>
+
+            <div class="produce-price">
+                ₹140
+                <span class="produce-unit">/ kg</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Fresh Apples',140,'🍎')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="grains">
+
+            <div class="produce-image">
+                🌾
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="grains">
+                Grains
+            </div>
+
+            <h3 data-i18n="wheat">
+                Wheat
+            </h3>
+
+            <div class="produce-location">
+                📍 Madhya Pradesh
+            </div>
+
+            <div class="produce-price">
+                ₹32
+                <span class="produce-unit">/ kg</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Wheat',32,'🌾')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="grains">
+
+            <div class="produce-image">
+                🍚
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="grains">
+                Grains
+            </div>
+
+            <h3 data-i18n="rice">
+                Rice
+            </h3>
+
+            <div class="produce-location">
+                📍 Kolhapur, Maharashtra
+            </div>
+
+            <div class="produce-price">
+                ₹52
+                <span class="produce-unit">/ kg</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Rice',52,'🍚')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+
+        <div class="market-card"
+             data-category="other">
+
+            <div class="produce-image">
+                🎋
+            </div>
+
+            <div class="produce-category"
+                 data-i18n="otherProduce">
+                Other Produce
+            </div>
+
+            <h3 data-i18n="sugarcane">
+                Sugarcane
+            </h3>
+
+            <div class="produce-location">
+                📍 Satara, Maharashtra
+            </div>
+
+            <div class="produce-price">
+                ₹3500
+                <span class="produce-unit">/ ton</span>
+            </div>
+
+            <button class="buy-btn"
+                    onclick="addToCart('Sugarcane',3500,'🎋')"
+                    data-i18n="buyNow">
+                Buy Now
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SELL PRODUCE -->
+
+    <div class="sell-section">
+
+        <h3 data-i18n="sellProduce">
+            🌾 Sell Your Produce
+        </h3>
+
+        <p data-i18n="sellDescription">
+            List your vegetables, fruits, grains or other farm produce
+            for buyers.
+        </p>
+
+
+        <div class="sell-form">
+
+            <div class="form-group">
+
+                <label data-i18n="produceName">
+                    Produce Name
+                </label>
+
+                <input id="sellProduceName"
+                       type="text"
+                       placeholder="e.g. Tomatoes">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label data-i18n="category">
+                    Category
+                </label>
+
+                <select id="sellCategory">
+
+                    <option value="vegetables"
+                            data-i18n="vegetables">
+                        Vegetables
+                    </option>
+
+                    <option value="fruits"
+                            data-i18n="fruits">
+                        Fruits
+                    </option>
+
+                    <option value="grains"
+                            data-i18n="grains">
+                        Grains
+                    </option>
+
+                    <option value="other"
+                            data-i18n="otherProduce">
+                        Other Produce
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label data-i18n="quantity">
+                    Quantity
+                </label>
+
+                <input id="sellQuantity"
+                       type="number"
+                       min="1"
+                       placeholder="e.g. 100">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label data-i18n="unit">
+                    Unit
+                </label>
+
+                <select id="sellUnit">
+
+                    <option value="kg">
+                        kg
+                    </option>
+
+                    <option value="quintal">
+                        Quintal
+                    </option>
+
+                    <option value="ton">
+                        Ton
+                    </option>
+
+                    <option value="dozen">
+                        Dozen
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label data-i18n="price">
+                    Price
+                </label>
+
+                <input id="sellPrice"
+                       type="number"
+                       min="1"
+                       placeholder="₹ Price">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label data-i18n="location">
+                    Location
+                </label>
+
+                <input id="sellLocation"
+                       type="text"
+                       placeholder="Village / City">
+
+            </div>
+
+        </div>
+
+
+        <button class="sell-btn"
+                onclick="sellProduce()"
+                data-i18n="listProduce">
+            + List Produce for Sale
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+</div>
+
+
+<!-- MODAL -->
+
+<div id="infoModal"
+     class="modal">
+
+    <div class="modal-content">
+
+        <span class="close-btn"
+              onclick="closeModal()">
+            ×
+        </span>
+
+        <h2 id="modalTitle">
+            Details
+        </h2>
+
+        <p id="modalBody">
+            Information loading...
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   TRANSLATIONS
+===================================================== */
+
+const translations = {
+
+en: {
+
+    brandTitle:"Smart Kisan",
+    brandSubtitle:"Smart Agriculture",
+    dashboard:"Dashboard",
+
+    sensors:"Sensors",
+    hardware:"Hardware & Control",
+    alerts:"Alerts & Forecast",
+    market:"Online Market",
+    attributes:"Additional Attributes",
+    schemes:"Government Schemes",
+
+    farmStatus:"🌱 Farm Status",
+    farmStatusText:"All major systems are currently operating normally.",
+
+    farmHealth:"Farm Health",
+    farmEquipment:"Farm Equipment",
+    alertsWeather:"🚨 Alerts & Weather",
+
+    additionalAttributes:"➕ Additional Attributes",
+    attributesDescription:"Extra tools and farmer services in one place",
+    marketAttribute:"Online Market",
+    marketAttributeDesc:"Buy farm produce or list your own produce for sale.",
+    sensorAttribute:"Sensor Analytics",
+    sensorAttributeDesc:"View soil, water, weather and field sensor information.",
+    smartAttribute:"Smart Automation",
+    smartAttributeDesc:"Manage connected farm equipment and automatic controls.",
+    governmentSchemes:"🏛️ Government Schemes",
+    schemesDescription:"Important agricultural schemes and farmer support programs",
+
+    onlineMarket:"🛒 Online Farm Market",
+    marketDescription:"Buy fresh farm produce or sell your own produce directly.",
+
+    pageDescription:"Simple information to help you care for your farm.",
+
+    overallHealth:"Overall Farm Health",
+    good:"Good",
+    systemsOnline:"All important systems are online",
+
+    soilMoisture:"Soil Moisture",
+    optimalCrops:"Optimal for crops",
+    optimalRange:"Optimal range",
+
+    waterTank:"Water Tank",
+    waterAvailable:"Water available",
+
+    warnings:"Warnings",
+    checkForecast:"Check today's forecast",
+
+    fieldConditions:"🌱 Field Conditions",
+    liveSensorInfo:"Live information from your farm sensors",
+
+    soilTemperature:"Soil Temperature",
+    normal:"Normal",
+    healthyRange:"Healthy range",
+
+    airConditions:"Air Conditions",
+    humidity:"Humidity",
+
+    rainSensor:"Rain Sensor",
+    clear:"Clear",
+    dry:"Dry",
+    noRain:"No rain detected",
+
+    sunlight:"Sunlight",
+    luxIntensity:"Lux intensity",
+
+    fieldActivity:"Field Activity",
+    noUnusualActivity:"No unusual activity",
+
+    active:"Active",
+    soilNutrients:"Soil Nutrients",
+    nutrientSensor:"Nutrient sensor active",
+
+    soilPH:"Soil pH",
+    balanced:"Balanced",
+    goodSoilBalance:"Good soil balance",
+
+    motionDetector:"Motion Detector",
+    fieldSecure:"Field secure",
+
+    equipmentDescription:"Monitor and manage your connected equipment",
+
+    solarPanels:"Solar Panels",
+    solarDescription:"Solar power system is working and supplying energy to your farm equipment.",
+
+    pesticideSprayer:"Pesticide Sprayer",
+    ready:"Ready",
+    sprayerDescription:"Sprayer is ready. Scheduled operation is set for 06:00 AM.",
+    readyToUse:"Ready to use",
+
+    farmCamera:"Farm Camera",
+    online:"Online",
+    cameraDescription:"Camera is connected and the live farm view is available.",
+    liveStream:"Live Stream",
+
+    gpsWifi:"GPS / Wi-Fi",
+    gpsDescription:"GPS is connected and Wi-Fi signal strength is good.",
+    connected:"Connected",
+
+    smartControl:"Smart Control",
+    automatic:"Automatic",
+    smartControlDescription:"Automatic mode allows the system to respond to sensor readings.",
+    autoMode:"Auto Mode",
+
+    alertsDescription:"Important information for today's farm activities",
+
+    importantWarning:"One Important Warning",
+    sprayWarning:"Please check the upcoming rain conditions before spraying.",
+
+    rainChance:"🌧️ Rain Chance",
+    pestRisk:"🐛 Pest Risk",
+    low:"Low",
+
+    sprayAdvice:"💦 Spray Advice",
+    checkWeather:"Check Weather",
+
+    todaysWeather:"Today's Weather",
+    partlyCloudy:"☀️ Partly Cloudy",
+
+    wind:"Wind",
+    uv:"UV",
+    moderate:"Moderate",
+
+    all:"All",
+    vegetables:"Vegetables",
+    fruits:"Fruits",
+    grains:"Grains",
+    otherProduce:"Other Produce",
+
+    cart:"Cart",
+    buyNow:"Buy Now",
+
+    tomatoes:"Fresh Tomatoes",
+    onions:"Fresh Onions",
+    potatoes:"Potatoes",
+    mangoes:"Alphonso Mangoes",
+    bananas:"Bananas",
+    apples:"Fresh Apples",
+    wheat:"Wheat",
+    rice:"Rice",
+    sugarcane:"Sugarcane",
+
+    sellProduce:"🌾 Sell Your Produce",
+    sellDescription:"List your vegetables, fruits, grains or other farm produce for buyers.",
+
+    produceName:"Produce Name",
+    category:"Category",
+    quantity:"Quantity",
+    unit:"Unit",
+    price:"Price",
+    location:"Location",
+
+    listProduce:"+ List Produce for Sale"
+},
+
+hi: {
+
+    brandTitle:"स्मार्ट किसान",
+    brandSubtitle:"स्मार्ट कृषि",
+    dashboard:"डैशबोर्ड",
+
+    sensors:"सेंसर",
+    hardware:"हार्डवेयर और नियंत्रण",
+    alerts:"चेतावनी और मौसम",
+    market:"ऑनलाइन बाजार",
+
+    farmStatus:"🌱 खेत की स्थिति",
+    farmStatusText:"सभी प्रमुख प्रणालियाँ सामान्य रूप से काम कर रही हैं।",
+
+    farmHealth:"खेत का स्वास्थ्य",
+    farmEquipment:"कृषि उपकरण",
+    alertsWeather:"🚨 चेतावनी और मौसम",
+
+    attributes:"अतिरिक्त सुविधाएँ",
+    schemes:"सरकारी योजनाएँ",
+    additionalAttributes:"➕ अतिरिक्त सुविधाएँ",
+    attributesDescription:"किसानों के लिए अतिरिक्त सुविधाएँ और सेवाएँ",
+    marketAttribute:"ऑनलाइन बाजार",
+    marketAttributeDesc:"कृषि उपज खरीदें या अपनी उपज बिक्री के लिए सूचीबद्ध करें।",
+    sensorAttribute:"सेंसर विश्लेषण",
+    sensorAttributeDesc:"मिट्टी, पानी, मौसम और खेत के सेंसर की जानकारी देखें।",
+    smartAttribute:"स्मार्ट ऑटोमेशन",
+    smartAttributeDesc:"जुड़े हुए कृषि उपकरणों और स्वचालित नियंत्रणों को प्रबंधित करें।",
+    governmentSchemes:"🏛️ सरकारी योजनाएँ",
+    schemesDescription:"महत्वपूर्ण कृषि योजनाएँ और किसान सहायता कार्यक्रम",
+
+    onlineMarket:"🛒 ऑनलाइन कृषि बाजार",
+    marketDescription:"ताजा कृषि उत्पाद खरीदें या अपनी उपज सीधे बेचें।",
+
+    pageDescription:"आपके खेत की देखभाल में मदद करने वाली सरल जानकारी।",
+
+    overallHealth:"खेत का स्वास्थ्य",
+    good:"अच्छा",
+    systemsOnline:"सभी महत्वपूर्ण प्रणालियाँ ऑनलाइन हैं",
+
+    soilMoisture:"मिट्टी की नमी",
+    optimalCrops:"फसलों के लिए उपयुक्त",
+    optimalRange:"उपयुक्त स्तर",
+
+    waterTank:"पानी की टंकी",
+    waterAvailable:"पानी उपलब्ध है",
+
+    warnings:"चेतावनियाँ",
+    checkForecast:"आज का मौसम देखें",
+
+    fieldConditions:"🌱 खेत की स्थिति",
+    liveSensorInfo:"आपके खेत के सेंसर से लाइव जानकारी",
+
+    soilTemperature:"मिट्टी का तापमान",
+    normal:"सामान्य",
+    healthyRange:"स्वस्थ स्तर",
+
+    airConditions:"हवा की स्थिति",
+    humidity:"नमी",
+
+    rainSensor:"बारिश सेंसर",
+    clear:"साफ",
+    dry:"सूखा",
+    noRain:"बारिश नहीं हो रही है",
+
+    sunlight:"सूर्य प्रकाश",
+    luxIntensity:"लक्स तीव्रता",
+
+    fieldActivity:"खेत की गतिविधि",
+    noUnusualActivity:"कोई असामान्य गतिविधि नहीं",
+
+    active:"सक्रिय",
+    soilNutrients:"मिट्टी के पोषक तत्व",
+    nutrientSensor:"पोषक तत्व सेंसर सक्रिय",
+
+    soilPH:"मिट्टी का pH",
+    balanced:"संतुलित",
+    goodSoilBalance:"मिट्टी का संतुलन अच्छा है",
+
+    motionDetector:"गतिविधि सेंसर",
+    fieldSecure:"खेत सुरक्षित है",
+
+    equipmentDescription:"अपने जुड़े हुए कृषि उपकरणों की निगरानी और प्रबंधन करें",
+
+    solarPanels:"सोलर पैनल",
+    solarDescription:"सौर ऊर्जा प्रणाली काम कर रही है और खेत के उपकरणों को ऊर्जा दे रही है।",
+
+    pesticideSprayer:"कीटनाशक स्प्रेयर",
+    ready:"तैयार",
+    sprayerDescription:"स्प्रेयर तैयार है। निर्धारित संचालन सुबह 06:00 बजे है।",
+    readyToUse:"उपयोग के लिए तैयार",
+
+    farmCamera:"खेत का कैमरा",
+    online:"ऑनलाइन",
+    cameraDescription:"कैमरा जुड़ा हुआ है और खेत का लाइव दृश्य उपलब्ध है।",
+    liveStream:"लाइव स्ट्रीम",
+
+    gpsWifi:"GPS / Wi-Fi",
+    gpsDescription:"GPS जुड़ा हुआ है और Wi-Fi सिग्नल अच्छा है।",
+    connected:"जुड़ा हुआ",
+
+    smartControl:"स्मार्ट नियंत्रण",
+    automatic:"स्वचालित",
+    smartControlDescription:"स्वचालित मोड सेंसर की जानकारी के अनुसार प्रणाली को प्रतिक्रिया देने देता है।",
+    autoMode:"ऑटो मोड",
+
+    alertsDescription:"आज के खेत के काम के लिए महत्वपूर्ण जानकारी",
+
+    importantWarning:"एक महत्वपूर्ण चेतावनी",
+    sprayWarning:"स्प्रे करने से पहले आने वाली बारिश की स्थिति जरूर देखें।",
+
+    rainChance:"🌧️ बारिश की संभावना",
+    pestRisk:"🐛 कीट जोखिम",
+    low:"कम",
+
+    sprayAdvice:"💦 स्प्रे सलाह",
+    checkWeather:"मौसम देखें",
+
+    todaysWeather:"आज का मौसम",
+    partlyCloudy:"☀️ आंशिक बादल",
+
+    wind:"हवा",
+    uv:"UV",
+    moderate:"मध्यम",
+
+    all:"सभी",
+    vegetables:"सब्जियाँ",
+    fruits:"फल",
+    grains:"अनाज",
+    otherProduce:"अन्य उपज",
+
+    cart:"कार्ट",
+    buyNow:"अभी खरीदें",
+
+    tomatoes:"ताजे टमाटर",
+    onions:"ताजे प्याज",
+    potatoes:"आलू",
+    mangoes:"अल्फांसो आम",
+    bananas:"केले",
+    apples:"ताजे सेब",
+    wheat:"गेहूं",
+    rice:"चावल",
+    sugarcane:"गन्ना",
+
+    sellProduce:"🌾 अपनी उपज बेचें",
+    sellDescription:"खरीदारों के लिए अपनी सब्जियाँ, फल, अनाज या अन्य कृषि उपज सूचीबद्ध करें।",
+
+    produceName:"उपज का नाम",
+    category:"श्रेणी",
+    quantity:"मात्रा",
+    unit:"इकाई",
+    price:"कीमत",
+    location:"स्थान",
+
+    listProduce:"+ बिक्री के लिए उपज सूचीबद्ध करें"
+},
+
+mr: {
+
+    brandTitle:"स्मार्ट किसान",
+    brandSubtitle:"स्मार्ट शेती",
+    dashboard:"डॅशबोर्ड",
+
+    sensors:"सेन्सर",
+    hardware:"हार्डवेअर आणि नियंत्रण",
+    alerts:"इशारे आणि हवामान",
+    market:"ऑनलाइन बाजार",
+
+    farmStatus:"🌱 शेताची स्थिती",
+    farmStatusText:"सर्व प्रमुख प्रणाली सध्या व्यवस्थित कार्यरत आहेत.",
+
+    farmHealth:"शेताचे आरोग्य",
+    farmEquipment:"शेतीची उपकरणे",
+    alertsWeather:"🚨 इशारे आणि हवामान",
+
+    attributes:"अतिरिक्त सुविधा",
+    schemes:"सरकारी योजना",
+    additionalAttributes:"➕ अतिरिक्त सुविधा",
+    attributesDescription:"शेतकऱ्यांसाठी अतिरिक्त सुविधा आणि सेवा",
+    marketAttribute:"ऑनलाइन बाजार",
+    marketAttributeDesc:"शेती उत्पादने खरेदी करा किंवा तुमचे उत्पादन विक्रीसाठी नोंदवा.",
+    sensorAttribute:"सेन्सर विश्लेषण",
+    sensorAttributeDesc:"माती, पाणी, हवामान आणि शेतातील सेन्सरची माहिती पहा.",
+    smartAttribute:"स्मार्ट ऑटोमेशन",
+    smartAttributeDesc:"जोडलेली शेती उपकरणे आणि स्वयंचलित नियंत्रण व्यवस्थापित करा.",
+    governmentSchemes:"🏛️ सरकारी योजना",
+    schemesDescription:"महत्त्वाच्या कृषी योजना आणि शेतकरी सहाय्य कार्यक्रम",
+
+    onlineMarket:"🛒 ऑनलाइन शेती बाजार",
+    marketDescription:"ताजी शेती उत्पादने खरेदी करा किंवा तुमची स्वतःची उत्पादने थेट विका.",
+
+    pageDescription:"तुमच्या शेताची काळजी घेण्यासाठी उपयुक्त सोपी माहिती.",
+
+    overallHealth:"शेताचे एकूण आरोग्य",
+    good:"चांगले",
+    systemsOnline:"सर्व महत्त्वाच्या प्रणाली ऑनलाइन आहेत",
+
+    soilMoisture:"मातीतील ओलावा",
+    optimalCrops:"पिकांसाठी योग्य",
+    optimalRange:"योग्य पातळी",
+
+    waterTank:"पाण्याची टाकी",
+    waterAvailable:"पाणी उपलब्ध आहे",
+
+    warnings:"इशारे",
+    checkForecast:"आजचे हवामान तपासा",
+
+    fieldConditions:"🌱 शेताची स्थिती",
+    liveSensorInfo:"तुमच्या शेतातील सेन्सरकडून थेट माहिती",
+
+    soilTemperature:"मातीचे तापमान",
+    normal:"सामान्य",
+    healthyRange:"आरोग्यदायी पातळी",
+
+    airConditions:"हवेची स्थिती",
+    humidity:"आर्द्रता",
+
+    rainSensor:"पाऊस सेन्सर",
+    clear:"स्वच्छ",
+    dry:"कोरडे",
+    noRain:"पाऊस आढळला नाही",
+
+    sunlight:"सूर्यप्रकाश",
+    luxIntensity:"लक्स तीव्रता",
+
+    fieldActivity:"शेतातील हालचाल",
+    noUnusualActivity:"असामान्य हालचाल नाही",
+
+    active:"सक्रिय",
+    soilNutrients:"मातीतील पोषक घटक",
+    nutrientSensor:"पोषक घटक सेन्सर सक्रिय",
+
+    soilPH:"मातीचा pH",
+    balanced:"संतुलित",
+    goodSoilBalance:"मातीचे संतुलन चांगले आहे",
+
+    motionDetector:"हालचाल शोधक",
+    fieldSecure:"शेत सुरक्षित आहे",
+
+    equipmentDescription:"तुमच्या जोडलेल्या शेती उपकरणांचे निरीक्षण आणि व्यवस्थापन करा",
+
+    solarPanels:"सौर पॅनेल",
+    solarDescription:"सौर ऊर्जा प्रणाली कार्यरत आहे आणि शेतीच्या उपकरणांना ऊर्जा पुरवत आहे.",
+
+    pesticideSprayer:"कीटकनाशक फवारणी यंत्र",
+    ready:"तयार",
+    sprayerDescription:"फवारणी यंत्र तयार आहे. नियोजित काम सकाळी 06:00 वाजता आहे.",
+    readyToUse:"वापरण्यास तयार",
+
+    farmCamera:"शेतातील कॅमेरा",
+    online:"ऑनलाइन",
+    cameraDescription:"कॅमेरा जोडलेला आहे आणि शेताचे थेट दृश्य उपलब्ध आहे.",
+    liveStream:"थेट दृश्य",
+
+    gpsWifi:"GPS / Wi-Fi",
+    gpsDescription:"GPS जोडलेले आहे आणि Wi-Fi सिग्नल चांगला आहे.",
+    connected:"जोडलेले",
+
+    smartControl:"स्मार्ट नियंत्रण",
+    automatic:"स्वयंचलित",
+    smartControlDescription:"स्वयंचलित मोड सेन्सरच्या माहितीवर आधारित प्रणालीला प्रतिसाद देण्यास मदत करतो.",
+    autoMode:"ऑटो मोड",
+
+    alertsDescription:"आजच्या शेतीच्या कामासाठी महत्त्वाची माहिती",
+
+    importantWarning:"एक महत्त्वाचा इशारा",
+    sprayWarning:"फवारणी करण्यापूर्वी येणाऱ्या पावसाची स्थिती तपासा.",
+
+    rainChance:"🌧️ पावसाची शक्यता",
+    pestRisk:"🐛 किडींचा धोका",
+    low:"कमी",
+
+    sprayAdvice:"💦 फवारणीचा सल्ला",
+    checkWeather:"हवामान तपासा",
+
+    todaysWeather:"आजचे हवामान",
+    partlyCloudy:"☀️ अंशतः ढगाळ",
+
+    wind:"वारा",
+    uv:"UV",
+    moderate:"मध्यम",
+
+    all:"सर्व",
+    vegetables:"भाज्या",
+    fruits:"फळे",
+    grains:"धान्य",
+    otherProduce:"इतर उत्पादने",
+
+    cart:"कार्ट",
+    buyNow:"आता खरेदी करा",
+
+    tomatoes:"ताजे टोमॅटो",
+    onions:"ताजे कांदे",
+    potatoes:"बटाटे",
+    mangoes:"हापूस आंबे",
+    bananas:"केळी",
+    apples:"ताजी सफरचंदे",
+    wheat:"गहू",
+    rice:"तांदूळ",
+    sugarcane:"ऊस",
+
+    sellProduce:"🌾 तुमचे उत्पादन विका",
+    sellDescription:"खरेदीदारांसाठी तुमच्या भाज्या, फळे, धान्य किंवा इतर शेती उत्पादनांची नोंद करा.",
+
+    produceName:"उत्पादनाचे नाव",
+    category:"श्रेणी",
+    quantity:"प्रमाण",
+    unit:"एकक",
+    price:"किंमत",
+    location:"ठिकाण",
+
+    listProduce:"+ विक्रीसाठी उत्पादन नोंदवा"
+}
+
+};
+
+
+/* =====================================================
+   MODAL TRANSLATIONS
+===================================================== */
+
+const modalTranslations = {
+
+soilMoisture:{
+    en:["Soil Moisture","Current soil moisture is 42%. This is within the optimal range for your crops."],
+    hi:["मिट्टी की नमी","वर्तमान मिट्टी की नमी 42% है। यह आपकी फसलों के लिए उपयुक्त स्तर में है।"],
+    mr:["मातीतील ओलावा","सध्याचा मातीतील ओलावा 42% आहे. ही पिकांसाठी योग्य पातळी आहे."]
+},
+
+soilTemperature:{
+    en:["Soil Temperature","Current soil temperature is 24°C. The temperature is normal for healthy crop growth."],
+    hi:["मिट्टी का तापमान","वर्तमान मिट्टी का तापमान 24°C है। यह फसल की स्वस्थ वृद्धि के लिए सामान्य है।"],
+    mr:["मातीचे तापमान","सध्याचे मातीचे तापमान 24°C आहे. पिकांच्या चांगल्या वाढीसाठी हे सामान्य आहे."]
+},
+
+airConditions:{
+    en:["Air Conditions","Current temperature is 30°C and humidity is 65%."],
+    hi:["हवा की स्थिति","वर्तमान तापमान 30°C और नमी 65% है।"],
+    mr:["हवेची स्थिती","सध्याचे तापमान 30°C आणि आर्द्रता 65% आहे."]
+},
+
+rainSensor:{
+    en:["Rain Sensor","No rain is currently detected."],
+    hi:["बारिश सेंसर","अभी बारिश नहीं हो रही है।"],
+    mr:["पाऊस सेन्सर","सध्या पाऊस आढळलेला नाही."]
+},
+
+lightIntensity:{
+    en:["Light Intensity","Current light intensity is 850 Lux."],
+    hi:["प्रकाश की तीव्रता","वर्तमान प्रकाश की तीव्रता 850 लक्स है।"],
+    mr:["प्रकाशाची तीव्रता","सध्याची प्रकाशाची तीव्रता 850 लक्स आहे."]
+},
+
+fieldActivity:{
+    en:["Field Activity","Normal field activity detected."],
+    hi:["खेत की गतिविधि","खेत में सामान्य गतिविधि पाई गई है।"],
+    mr:["शेतातील हालचाल","शेतामध्ये सामान्य हालचाल आढळली आहे."]
+},
+
+soilNutrients:{
+    en:["NPK Sensor","Nitrogen: 40 mg/kg, Phosphorus: 20 mg/kg, Potassium: 30 mg/kg."],
+    hi:["NPK सेंसर","नाइट्रोजन: 40 mg/kg, फॉस्फोरस: 20 mg/kg, पोटैशियम: 30 mg/kg।"],
+    mr:["NPK सेन्सर","नायट्रोजन: 40 mg/kg, फॉस्फरस: 20 mg/kg, पोटॅशियम: 30 mg/kg."]
+},
+
+soilPH:{
+    en:["Soil pH","Current soil pH is 6.8. This indicates balanced soil conditions."],
+    hi:["मिट्टी का pH","वर्तमान मिट्टी का pH 6.8 है। यह संतुलित मिट्टी की स्थिति दर्शाता है।"],
+    mr:["मातीचा pH","सध्याचा मातीचा pH 6.8 आहे. यामुळे मातीची स्थिती संतुलित असल्याचे दिसते."]
+},
+
+motionDetector:{
+    en:["Motion Detector","No unusual movement has been detected."],
+    hi:["गतिविधि सेंसर","कोई असामान्य गतिविधि नहीं पाई गई है।"],
+    mr:["हालचाल शोधक","कोणतीही असामान्य हालचाल आढळलेली नाही."]
+},
+
+waterLevel:{
+    en:["Water Level","The water tank is currently 78% full."],
+    hi:["पानी का स्तर","पानी की टंकी वर्तमान में 78% भरी हुई है।"],
+    mr:["पाण्याची पातळी","पाण्याची टाकी सध्या 78% भरलेली आहे."]
+}
+
+};
+
+
+let currentLanguage = "en";
+let cart = [];
+
+
+/* =====================================================
+   LANGUAGE
+===================================================== */
+
+function changeLanguage(language) {
+
+    currentLanguage = language;
+
+    document.documentElement.lang = language;
+
+    const dictionary = translations[language];
+
+    document.querySelectorAll("[data-i18n]")
+    .forEach(element => {
+
+        const key = element.getAttribute("data-i18n");
+
+        if(dictionary[key]) {
+            element.innerText = dictionary[key];
+        }
+
+    });
+
+
+    const activeSection =
+        document.querySelector(".section-pane.active");
+
+    if(activeSection) {
+
+        const titles = {
+            sensors:"farmHealth",
+            hardware:"farmEquipment",
+            alerts:"alertsWeather",
+            attributes:"additionalAttributes",
+            schemes:"governmentSchemes",
+            market:"onlineMarket"
+        };
+
+        const titleKey = titles[activeSection.id];
+
+        if(titleKey) {
+            document.getElementById("page-title").innerText =
+                dictionary[titleKey];
+        }
+
+    }
+
+}
+
+
+document.getElementById("languageSelect")
+.addEventListener("change",function() {
+
+    changeLanguage(this.value);
+
+});
+
+
+/* =====================================================
+   TAB SWITCHING
+===================================================== */
+
+function showSection(sectionId,button) {
+
+    document.querySelectorAll(".section-pane")
+    .forEach(section => {
+        section.classList.remove("active");
+    });
+
+
+    document.querySelectorAll(".nav-links button")
+    .forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+
+    const selectedSection =
+        document.getElementById(sectionId);
+
+    if(selectedSection) {
+        selectedSection.classList.add("active");
+    }
+
+
+    if(button) {
+        button.classList.add("active");
+    }
+
+
+    const titles = {
+
+        sensors:"farmHealth",
+        hardware:"farmEquipment",
+        alerts:"alertsWeather",
+        attributes:"additionalAttributes",
+        schemes:"governmentSchemes",
+        market:"onlineMarket"
+
+    };
+
+
+    const titleKey = titles[sectionId];
+
+    if(titleKey) {
+
+        document.getElementById("page-title").innerText =
+            translations[currentLanguage][titleKey];
+
+    }
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function openModal(type) {
+
+    const data = modalTranslations[type];
+
+    if(!data) return;
+
+    const languageData = data[currentLanguage];
+
+    document.getElementById("modalTitle").innerText =
+        languageData[0];
+
+    document.getElementById("modalBody").innerText =
+        languageData[1];
+
+    document.getElementById("infoModal").style.display =
+        "flex";
+
+}
+
+
+function closeModal() {
+
+    document.getElementById("infoModal").style.display =
+        "none";
+
+}
+
+
+window.addEventListener("click",function(event) {
+
+    const modal =
+        document.getElementById("infoModal");
+
+    if(event.target === modal) {
+        closeModal();
+    }
+
+});
+
+
+document.addEventListener("keydown",function(event) {
+
+    if(event.key === "Escape") {
+        closeModal();
+    }
+
+});
+
+
+/* =====================================================
+   HARDWARE TOGGLE
+===================================================== */
+
+function toggleDevice(element) {
+
+    element.classList.toggle("on");
+
+}
+
+
+/* =====================================================
+   MARKET FILTER
+===================================================== */
+
+function filterMarket(category,button) {
+
+    document.querySelectorAll(".category-btn")
+    .forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+
+    if(button) {
+        button.classList.add("active");
+    }
+
+
+    document.querySelectorAll(".market-card")
+    .forEach(card => {
+
+        if(
+            category === "all" ||
+            card.dataset.category === category
+        ) {
+
+            card.style.display = "block";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   ADD TO CART
+===================================================== */
+
+function addToCart(name,price,icon) {
+
+    const existing =
+        cart.find(item => item.name === name);
+
+
+    if(existing) {
+
+        existing.quantity++;
+
+    } else {
+
+        cart.push({
+            name:name,
+            price:price,
+            icon:icon,
+            quantity:1
+        });
+
+    }
+
+
+    updateCartCount();
+
+    const message =
+        currentLanguage === "hi"
+            ? `${name} कार्ट में जोड़ा गया।`
+            : currentLanguage === "mr"
+                ? `${name} कार्टमध्ये जोडले आहे.`
+                : `${name} added to cart.`;
+
+    alert(message);
+
+}
+
+
+/* =====================================================
+   CART COUNT
+===================================================== */
+
+function updateCartCount() {
+
+    const count =
+        cart.reduce(
+            (total,item) =>
+                total + item.quantity,
+            0
+        );
+
+    document.getElementById("cartCount").innerText =
+        count;
+
+}
+
+
+/* =====================================================
+   OPEN CART
+===================================================== */
+
+function openCart() {
+
+    let html = "";
+
+
+    if(cart.length === 0) {
+
+        html = `
+            <div class="empty-cart">
+                🛒<br><br>
+                ${
+                    currentLanguage === "hi"
+                    ? "आपका कार्ट खाली है।"
+                    : currentLanguage === "mr"
+                    ? "तुमचे कार्ट रिकामे आहे."
+                    : "Your cart is empty."
+                }
+            </div>
+        `;
+
+    } else {
+
+        cart.forEach(item => {
+
+            html += `
+
+                <div class="cart-item">
+
+                    <div class="cart-item-left">
+
+                        <div class="cart-item-icon">
+                            ${item.icon}
+                        </div>
+
+                        <div>
+
+                            <div class="cart-item-name">
+                                ${item.name}
+                            </div>
+
+                            <div class="cart-item-price">
+                                ₹${item.price} × ${item.quantity}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <strong>
+                        ₹${item.price * item.quantity}
+                    </strong>
+
+                </div>
+
+            `;
+
+        });
+
+
+        const total =
+            cart.reduce(
+                (sum,item) =>
+                    sum + item.price * item.quantity,
+                0
+            );
+
+
+        html += `
+
+            <div class="cart-total">
+
+                <span>
+                    ${
+                        currentLanguage === "hi"
+                        ? "कुल"
+                        : currentLanguage === "mr"
+                        ? "एकूण"
+                        : "Total"
+                    }
+                </span>
+
+                <span>
+                    ₹${total}
+                </span>
+
+            </div>
+
+
+            <button class="checkout-btn"
+                    onclick="checkout()">
+
+                ${
+                    currentLanguage === "hi"
+                    ? "खरीदारी पूरी करें"
+                    : currentLanguage === "mr"
+                    ? "खरेदी पूर्ण करा"
+                    : "Proceed to Purchase"
+                }
+
+            </button>
+
+        `;
+
+    }
+
+
+    document.getElementById("modalTitle").innerText =
+        currentLanguage === "hi"
+        ? "🛒 आपका कार्ट"
+        : currentLanguage === "mr"
+        ? "🛒 तुमचे कार्ट"
+        : "🛒 Your Cart";
+
+
+    document.getElementById("modalBody").innerHTML =
+        `<div class="cart-modal-list">${html}</div>`;
+
+
+    document.getElementById("infoModal").style.display =
+        "flex";
+
+}
+
+
+/* =====================================================
+   CHECKOUT
+===================================================== */
+
+function checkout() {
+
+    if(cart.length === 0) return;
+
+
+    const message =
+        currentLanguage === "hi"
+        ? "ऑर्डर सफलतापूर्वक दर्ज की गई!"
+        : currentLanguage === "mr"
+        ? "ऑर्डर यशस्वीरित्या नोंदवली गेली!"
+        : "Order placed successfully!";
+
+
+    alert(message);
+
+
+    cart = [];
+
+    updateCartCount();
+
+    closeModal();
+
+}
+
+
+/* =====================================================
+   SELL PRODUCE
+===================================================== */
+
+function sellProduce() {
+
+    const name =
+        document.getElementById("sellProduceName")
+        .value.trim();
+
+    const category =
+        document.getElementById("sellCategory")
+        .value;
+
+    const quantity =
+        document.getElementById("sellQuantity")
+        .value;
+
+    const unit =
+        document.getElementById("sellUnit")
+        .value;
+
+    const price =
+        document.getElementById("sellPrice")
+        .value;
+
+    const location =
+        document.getElementById("sellLocation")
+        .value.trim();
+
+
+    if(
+        !name ||
+        !quantity ||
+        !price ||
+        !location
+    ) {
+
+        alert(
+            currentLanguage === "hi"
+            ? "कृपया सभी आवश्यक जानकारी भरें।"
+            : currentLanguage === "mr"
+            ? "कृपया सर्व आवश्यक माहिती भरा."
+            : "Please fill in all required information."
+        );
+
+        return;
+
+    }
+
+
+    const newCard =
+        document.createElement("div");
+
+    newCard.className = "market-card";
+
+    newCard.dataset.category = category;
+
+
+    newCard.innerHTML = `
+
+        <div class="produce-image">
+            🌾
+        </div>
+
+        <div class="produce-category">
+            ${category}
+        </div>
+
+        <h3>
+            ${escapeHTML(name)}
+        </h3>
+
+        <div class="produce-location">
+            📍 ${escapeHTML(location)}
+        </div>
+
+        <div class="produce-price">
+            ₹${Number(price).toLocaleString("en-IN")}
+
+            <span class="produce-unit">
+                / ${unit}
+            </span>
+        </div>
+
+        <div class="card-info">
+            ${quantity} ${unit} available
+        </div>
+
+        <button class="buy-btn"
+                onclick="addToCart('${escapeJS(name)}',${Number(price)},'🌾')">
+
+            ${translations[currentLanguage].buyNow}
+
+        </button>
+
+    `;
+
+
+    document
+        .getElementById("marketGrid")
+        .prepend(newCard);
+
+
+    document.getElementById("sellProduceName").value = "";
+    document.getElementById("sellQuantity").value = "";
+    document.getElementById("sellPrice").value = "";
+    document.getElementById("sellLocation").value = "";
+
+
+    alert(
+        currentLanguage === "hi"
+        ? "आपकी उपज बिक्री के लिए सूचीबद्ध कर दी गई है!"
+        : currentLanguage === "mr"
+        ? "तुमचे उत्पादन विक्रीसाठी नोंदवले आहे!"
+        : "Your produce has been listed for sale!"
+    );
+
+}
+
+
+/* =====================================================
+   SECURITY HELPERS FOR SELL FORM
+===================================================== */
+
+function escapeHTML(value) {
+
+    return value
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeJS(value) {
+
+    return value
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'")
+        .replace(/"/g,"&quot;")
+        .replace(/\n/g," ");
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+changeLanguage("en");
+
+</script>
+
+</body>
+</html>
